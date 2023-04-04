@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+   <h2>Projects</h2>
+   <a href="{{ url_for('add_project') }}" class="btn btn-primary">Add Project</a>
+</div>
+<div class="accordion mb-3 mb-0" id="filterAccordion">
+   <div class="accordion-item">
+      <h2 class="accordion-header" id="filterAccordionHeader">
+         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#filterAccordionCollapse" aria-expanded="false" aria-controls="filterAccordionCollapse">
+         Filter Projects
+         </button>
+      </h2>
+      <div id="filterAccordionCollapse" class="accordion-collapse collapse" aria-labelledby="filterAccordionHeader" data-bs-parent="#filterAccordion">
+         <div class="accordion-body">
+            <form method="POST" class="row align-items-end">
+               {{ form.csrf_token }}
+               <div class="d-flex align-items-end">
+                  <div class="flex-grow-1 me-3">
+                     {{ form.agency.label }}
+                     {{ form.agency(class='form-control') }}
+                  </div>
+                  <div class="flex-grow-1 me-3">
+                     {{ form.customer.label }}
+                     {{ form.customer(class='form-control') }}
+                  </div>
+                  <div class="flex-grow-1 me-3">
+                     {{ form.competence_center.label }}
+                     {{ form.competence_center(class='form-control') }}
+                  </div>
+                  <div class="flex-grow-1 me-3">
+                     {{ form.mentoring_group.label }}
+                     {{ form.mentoring_group(class='form-control') }}
+                  </div>
+                  <div class="ms-auto">
+                     <input type="submit" value="Filter" class="btn btn-secondary">
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
+   {% for project in projects %}
+   <div class="col">
+      <div class="card">
+         <div class="card-header" data-bs-toggle="collapse" href="#collapse{{ project.id }}">
+            <h5 class="mb-0">{{ project.agency }} - {{ project.customer }}</h5>
+            <p class="mb-0">{{ project.project_name }}</p>
+         </div>
+         <div id="collapse{{ project.id }}" class="collapse">
+            <div class="card-body">
+               <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><strong>Role:</strong> {{ project.project_role }}</li>
+                  <li class="list-group-item"><strong>Hourly Rate:</strong> {{ project.hourly_rate }}€</li>
+                  <li class="list-group-item"><strong>Planned Hours:</strong> {{ project.planned_hours }}</li>
+                  <li class="list-group-item"><strong>Project Start:</strong> {{ project.project_start }}</li>
+                  <li class="list-group-item"><strong>Project End:</strong> {{ project.project_end }}</li>
+                  <li class="list-group-item"><strong>Competence Center:</strong> {{ project.competence_center }}</li>
+                  <li class="list-group-item"><strong>Mentoring Group:</strong> {{ project.mentoring_group }}</li>
+                  <li class="list-group-item"><strong>Project Extension:</strong> {{ project.project_extension }}</li>
+                  <li class="list-group-item"><strong>Note:</strong> {{ project.note }}</li>
+               </ul>
+               <div class="d-flex justify-content-end mt-3">
+                  <a href="{{ url_for('edit_project', project_id=project.id) }}" class="btn btn-primary me-2">Edit</a>
+                  <form action="{{ url_for('delete_project', project_id=project.id) }}" method="post" class="d-inline">
+                     {{ form.hidden_tag() }}
+                     <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#deleteModal{{ project.id }}">Delete</button>
+                     <div class="modal fade" id="deleteModal{{ project.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <h5 class="modal-title" id="deleteModalLabel">Delete Project</h5>
+                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                 Are you sure you want to delete this project?
+                              </div>
+                              <div class="modal-footer">
+                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                 <button type="submit" class="btn btn-primary">Delete</button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   {% endfor %}
+</div>
+{% endblock %}

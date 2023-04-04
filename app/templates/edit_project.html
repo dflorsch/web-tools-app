@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="mt-3">
+    <h2>Edit Project</h2>
+    <form action="{{ url_for('edit_project', project_id=project.id) }}" method="post">
+      {{ form.hidden_tag() }}
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            {{ form.agency.label }} {{ form.agency(class="form-control") }}
+          </div>
+          <div class="form-group col-md-6">
+           {{ form.customer.label }} {{ form.customer(class="form-control") }}
+          </div>
+          <div class="form-group col-md-6">
+            {{ form.project_name.label }} {{ form.project_name(class="form-control") }}
+          </div>
+          <div class="form-group col-md-6">
+            {{ form.project_role.label }} {{ form.project_role(class="form-control") }}
+          </div>
+          <div class="form-group col-md-6">
+            {{ form.hourly_rate.label }} {{ form.hourly_rate(class="form-control") }}
+          </div>
+          <div class="form-group col-md-6">
+            {{ form.planned_hours.label }} {{ form.planned_hours(class="form-control") }}
+          </div>
+          <div class="form-group col-md-6">
+            {{ form.project_start.label }} {{ form.project_start(class="form-control") }}
+          </div>
+          <div class="form-group col-md-6">
+            {{ form.project_end.label }} {{ form.project_end(class="form-control") }}
+          </div>
+          <div class="form-group col-md-6">
+            {{ form.competence_center.label }} {{ form.competence_center(class="form-control") }}
+          </div>
+          <div class="form-group col-md-6">
+            {{ form.mentoring_group.label }} {{ form.mentoring_group(class="form-control") }}
+          </div>
+          <div class="form-group col-md-6">
+            <label for="project_extension">Project Extension:</label>
+              <div class="form-check form-check-inline custom-radio">
+                <input class="form-check-input custom-control-input" type="radio" name="project_extension" id="project_extension_yes" value="Yes" {% if form.project_extension.data == 'Yes' %}checked{% endif %}>
+                <label class="form-check-label custom-control-label ml-2" for="project_extension_yes">Yes</label>
+              </div>
+            <div class="form-check form-check-inline custom-radio">
+              <input class="form-check-input custom-control-input" type="radio" name="project_extension" id="project_extension_no" value="No" {% if form.project_extension.data == 'No' %}checked{% endif %}>
+             <label class="form-check-label custom-control-label ml-2" for="project_extension_no">No</label>
+           </div>
+          </div>
+          <div class="form-group col-md-6">
+            {{ form.note.label }} {{ form.note(class="form-control") }}
+          </div>
+        </div>
+      <div class="d-flex justify-content-between">
+        <a href="{{ url_for('projects') }}" class="btn btn-secondary">Back</a>
+        <input type="submit" value="Submit" class="btn btn-primary">
+      </div>
+    </form>
+  </div>
+{% endblock %}

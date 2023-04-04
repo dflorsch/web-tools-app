@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">Attendance Entries</h2>
+<form method="GET" action="{{ url_for('attendance') }}" class="mb-4">
+
+<div class="form-group">
+    <label for="status">Filter by Status:</label>
+    <select class="form-control" id="status" name="status">
+        <option value="all" {% if not request.args.get('status') %}selected{% endif %}>All</option>
+        <option value="in_office" {% if request.args.get('status') == 'in_office' %}selected{% endif %}>In Office</option>
+        <option value="sick_leave" {% if request.args.get('status') == 'sick_leave' %}selected{% endif %}>Sick Leave</option>
+        <option value="on_vacation" {% if request.args.get('status') == 'on_vacation' %}selected{% endif %}>On Vacation</option>
+    </select>
+</div>
+
+<div class="accordion" id="dateFilterAccordion">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="dateFilterAccordionHeader">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dateFilterAccordionCollapse" aria-expanded="false" aria-controls="dateFilterAccordionCollapse">
+                Filter by Date Range
+            </button>
+        </h2>
+        <div id="dateFilterAccordionCollapse" class="accordion-collapse collapse" aria-labelledby="dateFilterAccordionHeader" data-bs-parent="#dateFilterAccordion">
+            <div class="accordion-body">
+                <div class="form-group mb-3">
+                    <button class="btn btn-outline-secondary" type="button" id="today-btn">Today</button>
+                    <button class="btn btn-outline-secondary ms-2" type="button" id="this-week-btn">This Week</button>
+                    <button class="btn btn-outline-secondary ms-2" type="button" data-start="{{ this_month }}" data-end="{{ today }}">This Month</button>
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label" for="start_datepicker">Start Date:</label>
+                    <input type="date" class="form-control" id="start_datepicker" name="start_date" value="{{ request.args.get('start_date') }}">
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label" for="end_datepicker">End Date:</label>
+                    <input type="date" class="form-control" id="end_datepicker" name="end_date" value="{{ request.args.get('end_date') }}">
+                </div>
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="submit" class="btn btn-primary mt-2">Filter</button>
+
+
+
+</form>
+{% if in_office or sick_leave or on_vacation %}
+    <h5>In Office</h5>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Person</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for attendance in in_office %}
+          <tr>
+            <td>{{ attendance.user.username }}</td>
+            <td>{{ attendance.start_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ attendance.end_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ attendance.note }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h5>Sick Leave</h5>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Person</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for attendance in sick_leave %}
+          <tr>
+            <td>{{ attendance.user.username }}</td>
+            <td>{{ attendance.start_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ attendance.end_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ attendance.note }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h5>On Vacation</h5>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Person</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for attendance in on_vacation %}
+          <tr>
+            <td>{{ attendance.user.username }}</td>
+            <td>{{ attendance.start_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ attendance.end_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ attendance.note }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No attendance entries found.</p>
+  {% endif %}
+
+
+<script>
+  const todayBtn = document.getElementById('today-btn');
+  todayBtn.addEventListener('click', () => {
+    const today = new Date();
+    const startDateInput = document.getElementById('start_datepicker');
+    const endDateInput = document.getElementById('end_datepicker');
+    startDateInput.value = today.toISOString().slice(0, 10);
+    endDateInput.value = today.toISOString().slice(0, 10);
+    const form = document.getElementById('attendance-form');
+    form.submit();
+  });
+
+  const thisWeekBtn = document.getElementById('this-week-btn');
+  thisWeekBtn.addEventListener('click', () => {
+    const today = new Date();
+    const startDateInput = document.getElementById('start_datepicker');
+    const endDateInput = document.getElementById('end_datepicker');
+    const weekStartDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+    const weekEndDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 6);
+    startDateInput.value = weekStartDate.toISOString().slice(0, 10);
+    endDateInput.value = weekEndDate.toISOString().slice(0, 10);
+    const form = document.getElementById('attendance-form');
+    form.submit();
+  });
+</script>
+
+
+{% endblock %}

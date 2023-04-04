@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Add Project</h2>
+<form action="{{ url_for('add_project') }}" method="POST">
+   {{ form.hidden_tag() }}
+   <div class="form-row">
+      <div class="form-group col-md-6">
+         {{ form.agency.label }} {{ form.agency(class="form-control") }}
+      </div>
+      <div class="form-group col-md-6">
+         {{ form.customer.label }} {{ form.customer(class="form-control") }}
+      </div>
+      <div class="form-group col-md-6">
+         {{ form.project_name.label }} {{ form.project_name(class="form-control") }}
+      </div>
+      <div class="form-group col-md-6">
+         {{ form.project_role.label }} {{ form.project_role(class="form-control") }}
+      </div>
+      <div class="form-group col-md-6">
+         {{ form.hourly_rate.label }} {{ form.hourly_rate(class="form-control") }}
+      </div>
+      <div class="form-group col-md-6">
+         {{ form.planned_hours.label }} {{ form.planned_hours(class="form-control") }}
+      </div>
+      <div class="form-group col-md-6">
+         {{ form.project_start.label }} {{ form.project_start(class="form-control") }}
+      </div>
+      <div class="form-group col-md-6">
+         {{ form.project_end.label }} {{ form.project_end(class="form-control") }}
+      </div>
+      <div class="form-group col-md-6">
+         {{ form.competence_center.label }} {{ form.competence_center(class="form-control") }}
+      </div>
+      <div class="form-group col-md-6">
+         {{ form.mentoring_group.label }} {{ form.mentoring_group(class="form-control") }}
+      </div>
+      <div class="form-group col-md-6">
+        <label for="project_extension">Project Extension:</label>
+        <select class="form-control" id="project_extension" name="project_extension">
+          <option value="True">Yes</option>
+          <option value="False">No</option>
+        </select>
+      </div>
+      <div class="form-group col-md-6">
+         {{ form.note.label }} {{ form.note(class="form-control") }}
+      </div>
+   </div>
+   <div class="d-flex justify-content-between">
+      <a href="{{ url_for('projects') }}" class="btn btn-secondary">Back</a>
+      <input type="submit" value="Submit" class="btn btn-primary">
+   </div>
+</form>
+{% endblock %}

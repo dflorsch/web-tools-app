@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Add Attendance Entry</h2>
+<form action="{{ url_for('add_attendance') }}" method="POST" >
+   {{ form.hidden_tag() }}
+   <div class="form-group">
+      <label for="type">Type</label>
+      <select class="form-control" id="type" name="status">
+         <option value="in_office">In Office</option>
+         <option value="sick_leave">Sick Leave</option>
+         <option value="on_vacation">Vacation</option>
+      </select>
+   </div>
+   <div class="form-group">
+      {{ form.start_date.label }} {{ form.start_date(class="form-control") }}
+   </div>
+   <div class="form-group">
+      {{ form.end_date.label }} {{ form.end_date(class="form-control") }}
+   </div>
+   <div class="form-group">
+      {{ form.note.label }} {{ form.note(class="form-control") }}
+   </div>
+   <div class="d-flex justify-content-between">
+      <a href="{{ url_for('home') }}" class="btn btn-secondary">Back</a>
+      <input type="submit" value="Submit" class="btn btn-primary">
+   </div>
+</form>
+{% endblock %}
